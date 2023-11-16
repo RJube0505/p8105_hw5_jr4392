@@ -86,16 +86,11 @@ calculate_prop_test = function(city_data) {
 
 result = homicides |>
     mutate(city_state = paste(city, state, sep=", ")) |>
+    filter(city_state != "Tulsa, AL") |>
   group_by(city_state) |>
   summarise(prop_test_results = list(calculate_prop_test(disposition))) |>
   unnest(prop_test_results)
 ```
-
-    ## Warning: There was 1 warning in `summarise()`.
-    ## ℹ In argument: `prop_test_results = list(calculate_prop_test(disposition))`.
-    ## ℹ In group 49: `city_state = "Tulsa, AL"`.
-    ## Caused by warning in `prop.test()`:
-    ## ! Chi-squared approximation may be incorrect
 
 ``` r
 ggplot(result, aes(y = reorder(city_state, estimate), x = estimate, xmin = conf.low, xmax = conf.high)) +
@@ -361,10 +356,10 @@ ggplot(avg_estimate_values, aes(x = true_mu, y = avg_estimate, group = 1)) +
 
 ![](hw5_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
 
-The red line is the average estimate versus the true average. Mean
-estimates are very close to the true mean. The blue line is the mean
-estimate of the rejected nulls versus the true mean. When the mean is 0,
-1, 2, 3, and 4, the sample means of the rejected nulls are not
-approximately equal to the true value of the mean because the power is
-not large enough. As the power increases or the effect size increases,
-the sample mean estimate will be very close to the mean.
+The line is the average estimate versus the true average. Mean estimates
+are very close to the true mean. The red point is the mean estimate of
+the rejected nulls versus the true mean. When the mean is 0, 1, 2, 3,
+and 4, the sample means of the rejected nulls are not approximately
+equal to the true value of the mean because the power is not large
+enough. As the power increases or the effect size increases, the sample
+mean estimate will be very close to the mean.
